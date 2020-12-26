@@ -331,8 +331,7 @@ static jo_3d_mesh *TankColors[] =
 		&MeshBlueTankBody,
 		&MeshBlueTankTower,
 		&MeshRedTankBody,
-		&MeshRedTankTower,
-};
+		&MeshRedTankTower};
 
 /**
  * Structure to represent player or computer controled tank
