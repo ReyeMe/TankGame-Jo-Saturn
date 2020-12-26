@@ -1,0 +1,20 @@
+{
+    "files.exclude": {
+        "**/*.o": true,
+        "**/*.map": true,
+        "**/*.iso": true,
+        "**/*.bin": true,
+        "**/*.cue": true,
+        "**/*.elf": true,
+        "**/*.bat": true
+    },
+    "files.watcherExclude": {
+        "**/*.o": true,
+        "**/*.map": true,
+        "**/*.iso": true,
+        "**/*.bin": true,
+        "**/*.cue": true,
+        "**/*.elf": true,
+        "**/*.bat": true
+    }
+}

@@ -1,11 +1,15 @@
 # Prerequisites
 *.d
+*.blend1
 
 # Object files
 *.o
 *.ko
 *.obj
 *.elf
+*.iso
+*.bin
+*.cue
 
 # Linker output
 *.ilk
