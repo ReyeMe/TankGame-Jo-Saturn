@@ -13,27 +13,26 @@ static AABB walls[NUMBER_OF_WALLS];
 static bullet_List bullets;
 
 static jo_3d_quad quad;
-static jo_vertice vertices[] = 
-{
-    { 0, 0, 0 },
-    { 1, 0, 0 },
-    { 1, 0, 1 },
-    { 0, 0, 1 },
-};
+static jo_vertice vertices[] =
+    {
+        {0, 0, 0},
+        {1, 0, 0},
+        {1, 0, 1},
+        {0, 0, 1}};
 
 void my_draw(void)
 {
-    bullet_List * bulletList = &bullets;
+    bullet_List *bulletList = &bullets;
 
     jo_clear_screen();
     jo_3d_camera_look_at(&cam);
 
     // Render tanks
-    for(int iterator = 0; iterator < NUMBER_OF_TANKS; iterator++)
+    for (int iterator = 0; iterator < NUMBER_OF_TANKS; iterator++)
     {
         if (playerTanks[iterator].InGame)
         {
-	        Tank_Draw(&playerTanks[iterator]);
+            Tank_Draw(&playerTanks[iterator]);
         }
     }
 
@@ -47,9 +46,9 @@ void my_draw(void)
 
         bulletList = bulletList->Next;
     }
-    
+
     // Render arena bounds
-    for(int iterator = 0; iterator < NUMBER_OF_WALLS; iterator++)
+    for (int iterator = 0; iterator < NUMBER_OF_WALLS; iterator++)
     {
         jo_3d_push_matrix();
         {
@@ -59,7 +58,6 @@ void my_draw(void)
         }
         jo_3d_pop_matrix();
     }
-
 }
 
 void my_gamepad(void)
@@ -72,7 +70,7 @@ void my_gamepad(void)
         thrust = 0;
         playerTanks[iterator].InGame = true;
 
-        if (jo_is_input_available(iterator) && 
+        if (jo_is_input_available(iterator) &&
             playerTanks[iterator].InGame &&
             !playerTanks[iterator].IsExploded)
         {
@@ -87,19 +85,19 @@ void my_gamepad(void)
                 playerTanks[iterator].TankAngle += -1;
             else if (jo_is_input_key_pressed(iterator, JO_KEY_RIGHT))
                 playerTanks[iterator].TankAngle += 1;
-            
+
             if (jo_is_input_key_pressed(iterator, JO_KEY_L))
                 playerTanks[iterator].TowerAngle += -1;
             else if (jo_is_input_key_pressed(iterator, JO_KEY_R))
                 playerTanks[iterator].TowerAngle += 1;
-            
-	        // Clamp tower angle to safe values
+
+            // Clamp tower angle to safe values
             if (playerTanks[iterator].TowerAngle < 0)
                 playerTanks[iterator].TowerAngle = 359;
             else if (playerTanks[iterator].TowerAngle > 359)
                 playerTanks[iterator].TowerAngle = 0;
 
-	        // Clamp tank angle to safe values
+            // Clamp tank angle to safe values
             if (playerTanks[iterator].TankAngle < 0)
                 playerTanks[iterator].TankAngle = 359;
             else if (playerTanks[iterator].TankAngle > 359)
@@ -130,8 +128,8 @@ void my_gamepad(void)
 void jo_main(void)
 {
     // Prepare scene
-	jo_core_init(JO_COLOR_Black);
-	Tank_Load_textures();
+    jo_core_init(JO_COLOR_Black);
+    Tank_Load_textures();
     jo_3d_camera_init(&cam);
     jo_3d_camera_set_viewpoint(&cam, 0, -40, -3);
 
@@ -158,8 +156,8 @@ void jo_main(void)
     Bullet_Initialize();
 
     // Start game
-	jo_core_add_callback(my_draw);
+    jo_core_add_callback(my_draw);
     jo_core_add_callback(my_gamepad);
 
-	jo_core_run();
+    jo_core_run();
 }

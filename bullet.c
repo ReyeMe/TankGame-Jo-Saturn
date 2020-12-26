@@ -5,7 +5,7 @@
 static int trail_texture;
 static int bullet_texture;
 
-void Bullet_Create(bullet_List * bulletList, tank_Object * firedBy)
+void Bullet_Create(bullet_List *bulletList, tank_Object *firedBy)
 {
     // Create bullet
     int id = 0;
@@ -13,7 +13,7 @@ void Bullet_Create(bullet_List * bulletList, tank_Object * firedBy)
     jo_fixed lx = -jo_fixed_mult(jo_sin(angle), PLAYER_BOX_SIZE);
     jo_fixed lz = -jo_fixed_mult(jo_cos(angle), PLAYER_BOX_SIZE);
 
-    bullet_Object * bullet = jo_malloc(sizeof(bullet_Object));
+    bullet_Object *bullet = jo_malloc(sizeof(bullet_Object));
     bullet->Bounced = false;
     bullet->FiredBy = firedBy;
 
@@ -32,31 +32,31 @@ void Bullet_Create(bullet_List * bulletList, tank_Object * firedBy)
     }
 
     // Add bullet to the list
-    bullet_List * current = bulletList;
+    bullet_List *current = bulletList;
 
     while (current->Bullet != NULL)
     {
         id++;
         current = current->Next;
     }
-    
+
     bullet->Id = id;
     current->Bullet = bullet;
 
     // Add next empty item
     if (current->Next == NULL)
     {
-        bullet_List * newItem = jo_malloc(sizeof(bullet_List));
+        bullet_List *newItem = jo_malloc(sizeof(bullet_List));
         newItem->Bullet = NULL;
         newItem->Next = NULL;
         current->Next = newItem;
     }
 }
 
-void Bullet_Destroy(bullet_List * bulletList, bullet_Object * bullet)
+void Bullet_Destroy(bullet_List *bulletList, bullet_Object *bullet)
 {
-    bullet_List * last = NULL;
-    bullet_List * current = bulletList;
+    bullet_List *last = NULL;
+    bullet_List *current = bulletList;
 
     while (current->Next != NULL && current->Bullet->Id != bullet->Id)
     {
@@ -71,7 +71,7 @@ void Bullet_Destroy(bullet_List * bulletList, bullet_Object * bullet)
 
         if (last != NULL)
         {
-            bullet_List * next = current->Next;
+            bullet_List *next = current->Next;
             jo_free(current);
             last->Next = next;
         }
@@ -84,7 +84,7 @@ void Bullet_Initialize(void)
     trail_texture = jo_sprite_add_tga(JO_ROOT_DIR, "TRAIL.TGA", JO_COLOR_Black);
 }
 
-void Bullet_Draw(bullet_Object * bullet)
+void Bullet_Draw(bullet_Object *bullet)
 {
     jo_fixed trailSize = BULLET_TRAIL_SIZE_RENDER;
 
@@ -93,7 +93,7 @@ void Bullet_Draw(bullet_Object * bullet)
         jo_3d_push_matrix();
         {
             jo_3d_translate_matrix_fixed(bullet->Trail[trail].x, bullet->Trail[trail].y, bullet->Trail[trail].z);
-            
+
             jo_3d_push_matrix();
             {
                 jo_3d_rotate_matrix_x(90);
