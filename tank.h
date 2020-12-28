@@ -342,12 +342,12 @@ typedef struct
 	char Color;				   /**Tank color ID*/
 	bool IsExploded;		   /**Is tank exploded?*/
 	bool IsFiring;			   /**Is tank firing?*/
-	bool InGame;			   /**Is tank in game?*/
 	short TowerAngle;		   /**Current tower angle*/
 	short TankAngle;		   /**Current tank angle*/
 	jo_pos3D_fixed Location;   /**Current tank location*/
 	jo_vector Velocity;		   /**Current tank velocity*/
 	int FiringAnimationFrames; /**Current number of animation frames passed*/
+	int Controller;			   /**Controller ID*/
 } tank_Object;
 
 /**
@@ -365,6 +365,12 @@ void Tank_Create(tank_Object *tank, const char color, const short tankAngle, con
  * Load tank textures
  */
 void Tank_Load_textures(void);
+
+/**
+ * Update tank based on gamepad input
+ * @param tank Tank object
+ */
+void Tank_Input_Update(tank_Object *tank);
 
 /**
  * Draw tank object

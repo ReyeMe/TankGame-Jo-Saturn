@@ -10,8 +10,8 @@ void Bullet_Create(bullet_List *bulletList, tank_Object *firedBy)
     // Create bullet
     int id = 0;
     int angle = (firedBy->TankAngle + firedBy->TowerAngle) % 360;
-    jo_fixed lx = -jo_fixed_mult(jo_sin(angle), PLAYER_BOX_SIZE);
-    jo_fixed lz = -jo_fixed_mult(jo_cos(angle), PLAYER_BOX_SIZE);
+    jo_fixed lx = -jo_fixed_mult(jo_sin(angle), jo_fixed_div(PLAYER_BOX_SIZEH, JO_FIXED_2));
+    jo_fixed lz = -jo_fixed_mult(jo_cos(angle), jo_fixed_div(PLAYER_BOX_SIZEH, JO_FIXED_2));
 
     bullet_Object *bullet = jo_malloc(sizeof(bullet_Object));
     bullet->Bounced = false;

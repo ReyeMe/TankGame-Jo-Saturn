@@ -17,7 +17,7 @@ void Tank_Create(tank_Object *tank, const char color, const short tankAngle, con
 	tank->IsExploded = false;
 	tank->IsFiring = false;
 	tank->FiringAnimationFrames = 0;
-	tank->InGame = false;
+	tank->Controller = 0;
 }
 
 void Tank_Load_textures(void)
@@ -54,6 +54,57 @@ void Tank_Load_textures(void)
 
 	for (iterator = 0; iterator < 5; iterator++)
 		AttributesRedTankTower[iterator].texno += spriteStartIndex;
+}
+
+void Tank_Input_Update(tank_Object *tank)
+{
+	char thrust = 0;
+
+    if (jo_is_input_available(tank->Controller) && !tank->IsExploded)
+    {
+        tank->IsFiring = jo_is_input_key_pressed(tank->Controller, JO_KEY_A);
+
+        if (jo_is_input_key_pressed(tank->Controller, JO_KEY_UP))
+            thrust = -1;
+        else if (jo_is_input_key_pressed(tank->Controller, JO_KEY_DOWN))
+            thrust = 1;
+
+        if (jo_is_input_key_pressed(tank->Controller, JO_KEY_LEFT))
+            tank->TankAngle += -1;
+        else if (jo_is_input_key_pressed(tank->Controller, JO_KEY_RIGHT))
+            tank->TankAngle += 1;
+
+        if (jo_is_input_key_pressed(tank->Controller, JO_KEY_L))
+            tank->TowerAngle += -1;
+        else if (jo_is_input_key_pressed(tank->Controller, JO_KEY_R))
+            tank->TowerAngle += 1;
+
+        // Clamp tower angle to safe values
+        if (tank->TowerAngle < 0)
+            tank->TowerAngle = 359;
+        else if (tank->TowerAngle > 359)
+            tank->TowerAngle = 0;
+
+        // Clamp tank angle to safe values
+        if (tank->TankAngle < 0)
+            tank->TankAngle = 359;
+        else if (tank->TankAngle > 359)
+            tank->TankAngle = 0;
+
+        if (tank->IsFiring && tank->FiringAnimationFrames == 0)
+        {
+            tank->FiringAnimationFrames = 1;
+        }
+
+        // Move tank
+        if (thrust != 0)
+        {
+            tank->Velocity.x = jo_fixed_mult(jo_sin(tank->TankAngle) * thrust, PLAYER_SPEED);
+            tank->Velocity.z = jo_fixed_mult(jo_cos(tank->TankAngle) * thrust, PLAYER_SPEED);
+        }
+    }
+
+	return thrust;
 }
 
 void Tank_Draw(tank_Object *tank)
