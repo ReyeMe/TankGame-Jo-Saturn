@@ -17,7 +17,8 @@
                 "JO_COMPILE_USING_SGL=1",
                 "JO_COMPILE_WITH_PRINTF_SUPPORT=1",
                 "JO_DEBUG=1",
-                "JO_COMPILE_WITH_FS_SUPPORT=1"
+                "JO_COMPILE_WITH_FS_SUPPORT=1",
+                "JO_COMPILE_WITH_AUDIO_SUPPORT=1"
             ],
             "cStandard": "c17",
             "intelliSenseMode": "gcc-x64"

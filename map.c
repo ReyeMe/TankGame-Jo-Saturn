@@ -125,7 +125,7 @@ void Map_Draw(map_Data *map, linked_List *bullets, linked_List *emits, tank_Obje
         jo_3d_create_plane(&fenceWall, fenceWallVertices);
         jo_3d_set_color(&solidWall, JO_COLOR_Red);
         jo_3d_set_color(&breakableWall, JO_COLOR_Yellow);
-        jo_3d_set_color(&fenceWall, JO_COLOR_SemiBlue);
+        jo_3d_set_color(&fenceWall, JO_COLOR_Green);
         solidWall.attribute.sort = SORT_MAX;
         breakableWall.attribute.sort = SORT_MAX;
         fenceWall.attribute.sort = SORT_MAX;
@@ -172,16 +172,6 @@ void Map_Draw(map_Data *map, linked_List *bullets, linked_List *emits, tank_Obje
                     jo_3d_rotate_matrix_x(90);
                     jo_3d_set_scale_fixed(scale, scale, scale);
                     jo_3d_draw_sprite(((Emit_data*)emited->Current)->SpriteId);
-
-                    ((Emit_data*)emited->Current)->FramesAlive++;
-                    ((Emit_data*)emited->Current)->Location.x += ((Emit_data*)emited->Current)->Velocity.x;
-                    ((Emit_data*)emited->Current)->Location.y += ((Emit_data*)emited->Current)->Velocity.y;
-                    ((Emit_data*)emited->Current)->Location.z += ((Emit_data*)emited->Current)->Velocity.z;
-
-                    if (((Emit_data*)emited->Current)->FramesAlive >= ((Emit_data*)emited->Current)->FramesToLive)
-                    {
-                        linkedList_Remove(emits, emited->Current);
-                    }
                 }
                 jo_3d_pop_matrix();
             }

@@ -115,7 +115,7 @@ static void Bullet_Create_trail(linked_List *emits, bullet_Object *bullet)
     linkedList_Add(emits, emit);
 }
 
-static void Bullet_Update_Single(bullet_Object *bullet, linked_List *emits, linked_List *bullets, tank_Object *tanks, map_Data *map)
+static void Bullet_Update_Single(bullet_Object *bullet, linked_List *emits, linked_List *bullets, tank_Object *tanks, jo_sound * explosion, map_Data *map)
 {
     // Prevent bullets that miss collision to fly out
     if (map->Walls[1].Rectangle.Bottom < bullet->Location.y ||
@@ -161,6 +161,7 @@ static void Bullet_Update_Single(bullet_Object *bullet, linked_List *emits, link
             {
                 tanks[tankIndex].IsExploded = true;
                 Bullet_Create_explosion(emits, bullet);
+                jo_audio_play_sound(explosion);
                 Bullet_Destroy(bullets, bullet);
                 return;
             }
@@ -186,12 +187,14 @@ static void Bullet_Update_Single(bullet_Object *bullet, linked_List *emits, link
                 map->Walls[wallIndex].Flags |= 0x2;
                 Bullet_Destroy(bullets, bullet);
                 Bullet_Create_explosion(emits, bullet);
+                jo_audio_play_sound(explosion);
                 break;
             }
             else if (bullet->Bounced)
             {
                 Bullet_Destroy(bullets, bullet);
                 Bullet_Create_explosion(emits, bullet);
+                jo_audio_play_sound(explosion);
                 break;
             }
             else
@@ -225,7 +228,7 @@ static void Bullet_Update_Single(bullet_Object *bullet, linked_List *emits, link
     bullet->Location.z += vy;
 }
 
-void Bullet_Update_All(linked_List *bullets, linked_List *emits, tank_Object *tanks, map_Data *map)
+void Bullet_Update_All(linked_List *bullets, linked_List *emits, tank_Object *tanks, jo_sound * explosion, map_Data *map)
 {
     linked_List *bulletList = bullets;
 
@@ -233,7 +236,7 @@ void Bullet_Update_All(linked_List *bullets, linked_List *emits, tank_Object *ta
     {
         if (bulletList->Current != JO_NULL)
         {
-            Bullet_Update_Single(bulletList->Current, emits, bullets, tanks, map);
+            Bullet_Update_Single(bulletList->Current, emits, bullets, tanks, explosion, map);
         }
 
         bulletList = bulletList->Next;

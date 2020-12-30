@@ -18,6 +18,12 @@ struct linked_List
 void linkedList_Initialize(linked_List * list);
 
 /**
+ * Clear list
+ * @param list Allocated linked list
+ */
+void linkedList_Clear_all(linked_List * list);
+
+/**
  * Load map file
  * @param list Allocated linked list
  * @param item Item to add

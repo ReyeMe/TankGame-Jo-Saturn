@@ -27,7 +27,7 @@ bool AABB_Swept_collision(const AABB *wall, const AABB *moving, const jo_fixed v
  * @param tanks List of all tanks in the scene
  * @param map Current map data
  */
-void Bullet_Update_All(linked_List *bullets, linked_List *emits, tank_Object *tanks, map_Data *map);
+void Bullet_Update_All(linked_List *bullets, linked_List *emits, tank_Object *tanks, jo_sound * explosion, map_Data *map);
 
 /**
  * Update tank movement with collision
