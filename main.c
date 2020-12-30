@@ -44,17 +44,26 @@ static char *maps[3] =
 
 void StartGame(const char *const mapFile)
 {
-    jo_audio_play_sound(&soundclick);
-
     inGameMenu = false;
     jo_clear_background(JO_COLOR_Black);
     map = Map_Load("MAPS", mapFile);
     tanks = jo_malloc(sizeof(tank_Object) * map->Header.NumOfSpawns);
 
+    int lastChecked = 0;
+
     for (int tank = 0; tank < map->Header.NumOfSpawns; tank++)
     {
         Tank_Create(&tanks[tank], tank, map->Spawns[tank].PlayerStartAngle, map->Spawns[tank].Location.x, 0, map->Spawns[tank].Location.y);
-        tanks[tank].Controller = tank;
+        
+        for (int controller = lastChecked; controller < 16; controller++)
+        {
+            if (jo_is_input_available(controller))
+            {
+                tanks[tank].Controller = controller;
+                lastChecked = controller + 1;
+                break;
+            }
+        }
     }
 
     inGame = true;
@@ -117,11 +126,20 @@ void draw_loop(void)
         jo_printf_with_color(9, 21, JO_COLOR_INDEX_White, "Press start to play...");
 
         jo_printf_with_color(1,28, JO_COLOR_INDEX_Purple, "Created by Reye (web: reye.me)");
+        jo_set_printf_color_index(JO_COLOR_Black);
     }
 }
 
 void game_loop(void)
 {
+    CdcStat cdStatus;
+    CDC_GetCurStat(&cdStatus);
+
+    if (cdStatus.status == CDC_ST_OPEN)
+    {
+        jo_goto_boot_menu();
+    }
+
     if (inGame)
     {
         int tanksAlive = 0;
@@ -192,9 +210,10 @@ void game_loop(void)
             }
             else
             {
-                jo_printf_with_color(13, 15, JO_COLOR_INDEX_Purple, "Player %d wins!", lastAlive);
+                jo_printf_with_color(13, 15, JO_COLOR_INDEX_White, "Player %d wins!", lastAlive);
                 jo_printf_with_color(10, 16, JO_COLOR_INDEX_White, "Press B to restart or");
                 jo_printf_with_color(7, 17, JO_COLOR_INDEX_White, "press A to go to main menu");
+                jo_set_printf_color_index(JO_COLOR_Black);
 
                 if (jo_is_pad1_key_down(JO_KEY_A))
                 {

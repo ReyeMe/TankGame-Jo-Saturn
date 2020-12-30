@@ -125,11 +125,8 @@ void Map_Draw(map_Data *map, linked_List *bullets, linked_List *emits, tank_Obje
         jo_3d_create_plane(&fenceWall, fenceWallVertices);
         jo_3d_set_color(&solidWall, JO_COLOR_Red);
         jo_3d_set_color(&breakableWall, JO_COLOR_Yellow);
-        jo_3d_set_color(&fenceWall, JO_COLOR_Green);
-        solidWall.attribute.sort = SORT_MAX;
-        breakableWall.attribute.sort = SORT_MAX;
-        fenceWall.attribute.sort = SORT_MAX;
-        fenceWall.attribute.atrb = CL32KRGB | MESHon;
+        jo_3d_set_color(&fenceWall, JO_COLOR_Cyan);
+        jo_3d_set_screen_doors(&fenceWall, true);
     }
     // ALPHA ONLY
 
