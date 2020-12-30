@@ -57,10 +57,27 @@ typedef struct
     map_Detail *Details;
 } map_Data;
 
+/**
+ * Load map file
+ * @param sub_dir Folder maps are located int
+ * @param filename Name of the file
+ * @return Map data
+ */
 map_Data *Map_Load(const char *const sub_dir, const char *const filename);
 
+/**
+ * Unload map file
+ * @param map Map data
+ */
 void Map_UnLoad(map_Data *map);
 
-void Map_Draw(map_Data *map, bullet_List *bulletList, tank_Object *tanks);
+/**
+ * Load map file
+ * @param map Map geometry to draw
+ * @param bulletList Bullets to draw
+ * @param emits Particles to draw
+ * @param tanks Tanks to draw
+ */
+void Map_Draw(map_Data *map, linked_List *bulletList, linked_List *emits, tank_Object *tanks);
 
 #endif

@@ -1,4 +1,5 @@
 #include <jo/jo.h>
+#include "linkedList.h"
 #include "aabb.h"
 #include "tank.h"
 #include "bullet.h"
@@ -9,7 +10,8 @@ static jo_camera cam;
 
 // Game stuff
 static bool inGame = false;
-static bullet_List bullets;
+static linked_List bullets;
+static linked_List emits;
 static map_Data map;
 static tank_Object * tanks;
 
@@ -19,14 +21,14 @@ void draw_loop(void)
     jo_3d_camera_look_at(&cam);
 
     if (inGame)
-        Map_Draw(&map, &bullets, tanks);
+        Map_Draw(&map, &bullets, &emits, tanks);
 }
 
 void game_loop(void)
 {
     if (inGame)
     {
-        Bullet_Update_All(&bullets, tanks, &map);
+        Bullet_Update_All(&bullets, &emits, tanks, &map);
 
         for (int tank = 0; tank < map.Header.NumOfSpawns; tank++)
         {
@@ -47,13 +49,12 @@ void jo_main(void)
     jo_3d_camera_init(&cam);
     jo_3d_camera_set_viewpoint(&cam, 0, -40, -3);
 
-    bullets.Bullet = NULL;
-    bullets.Next = NULL;
-
+    linkedList_Initialize(&emits);
+    linkedList_Initialize(&bullets);
     Tank_Load_textures();
     Bullet_Initialize();
 
-    map = *Map_Load("MAPS", "DEMO.TGL");
+    map = *Map_Load("MAPS", "ARENA02.TGL");
     tanks = jo_malloc(sizeof(tank_Object) * map.Header.NumOfSpawns);
 
     for (int tank = 0; tank < map.Header.NumOfSpawns; tank++)

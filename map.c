@@ -1,4 +1,6 @@
 #include <jo/jo.h>
+#include "emit.h"
+#include "linkedList.h"
 #include "aabb.h"
 #include "tank.h"
 #include "bullet.h"
@@ -62,9 +64,9 @@ map_Data *Map_Load(const char *const sub_dir, const char *const filename)
     map->Walls[2].Flags = 0;
     map->Walls[3].Flags = 0;
     AABB_Create_size(&map->Walls[0].Rectangle, jo_int2fixed(-37), jo_int2fixed(-28), jo_int2fixed(74), JO_FIXED_2);
-    AABB_Create_size(&map->Walls[1].Rectangle, jo_int2fixed(-37), jo_int2fixed(28), jo_int2fixed(74), JO_FIXED_2);
-    AABB_Create_size(&map->Walls[2].Rectangle, jo_int2fixed(-39), jo_int2fixed(-26), JO_FIXED_2, jo_int2fixed(54));
-    AABB_Create_size(&map->Walls[3].Rectangle, jo_int2fixed(37), jo_int2fixed(-26), JO_FIXED_2, jo_int2fixed(54));
+    AABB_Create_size(&map->Walls[1].Rectangle, jo_int2fixed(-37), jo_int2fixed(26), jo_int2fixed(74), JO_FIXED_2);
+    AABB_Create_size(&map->Walls[2].Rectangle, jo_int2fixed(-39), jo_int2fixed(-26), JO_FIXED_2, jo_int2fixed(52));
+    AABB_Create_size(&map->Walls[3].Rectangle, jo_int2fixed(37), jo_int2fixed(-26), JO_FIXED_2, jo_int2fixed(52));
 
     // Add walls from map file
     for (counter = 4; counter < map->Header.NumOfWalls; counter++)
@@ -110,7 +112,7 @@ void Map_UnLoad(map_Data *map)
     jo_free(map);
 }
 
-void Map_Draw(map_Data *map, bullet_List *bullets, tank_Object *tanks)
+void Map_Draw(map_Data *map, linked_List *bullets, linked_List *emits, tank_Object *tanks)
 {
     // ALPHA ONLY
     static bool run = false;
@@ -131,7 +133,8 @@ void Map_Draw(map_Data *map, bullet_List *bullets, tank_Object *tanks)
     }
     // ALPHA ONLY
 
-    bullet_List *bulletList = bullets;
+    linked_List *bulletList = bullets;
+    linked_List *emited = emits;
 
     // Render tanks
     for (int iterator = 0; iterator < map->Header.NumOfSpawns; iterator++)
@@ -140,17 +143,53 @@ void Map_Draw(map_Data *map, bullet_List *bullets, tank_Object *tanks)
     }
 
     // Render bullets
-    while (bulletList != NULL)
+    while (bulletList != JO_NULL)
     {
-        if (bulletList->Bullet != NULL)
+        if (bulletList->Current != JO_NULL)
         {
-            Bullet_Draw(bulletList->Bullet);
+            Bullet_Draw(bulletList->Current);
         }
 
         bulletList = bulletList->Next;
     }
 
-    // TODO: Render map details
+    // Render emits
+    while (emited != JO_NULL)
+    {
+        if (emited->Current != JO_NULL)
+        {
+            jo_3d_push_matrix();
+            {
+                jo_fixed scale = JO_FIXED_1 - jo_fixed_div(jo_int2fixed(((Emit_data*)emited->Current)->FramesAlive), jo_int2fixed(((Emit_data*)emited->Current)->FramesToLive));
+                scale = jo_fixed_div(scale, ((Emit_data*)emited->Current)->BaseScaleDiv);
+                jo_3d_translate_matrix_fixed(
+                    ((Emit_data*)emited->Current)->Location.x,
+                    ((Emit_data*)emited->Current)->Location.y,
+                    ((Emit_data*)emited->Current)->Location.z);
+                
+                jo_3d_push_matrix();
+                {
+                    jo_3d_rotate_matrix_x(90);
+                    jo_3d_set_scale_fixed(scale, scale, scale);
+                    jo_3d_draw_sprite(((Emit_data*)emited->Current)->SpriteId);
+
+                    ((Emit_data*)emited->Current)->FramesAlive++;
+                    ((Emit_data*)emited->Current)->Location.x += ((Emit_data*)emited->Current)->Velocity.x;
+                    ((Emit_data*)emited->Current)->Location.y += ((Emit_data*)emited->Current)->Velocity.y;
+                    ((Emit_data*)emited->Current)->Location.z += ((Emit_data*)emited->Current)->Velocity.z;
+
+                    if (((Emit_data*)emited->Current)->FramesAlive >= ((Emit_data*)emited->Current)->FramesToLive)
+                    {
+                        linkedList_Remove(emits, emited->Current);
+                    }
+                }
+                jo_3d_pop_matrix();
+            }
+            jo_3d_pop_matrix();
+        }
+
+        emited = emited->Next;
+    }
 
     // Render arena bounds
     for (int iterator = 0; iterator < map->Header.NumOfWalls; iterator++)

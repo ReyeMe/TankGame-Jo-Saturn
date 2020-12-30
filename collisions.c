@@ -1,4 +1,6 @@
 #include <jo/jo.h>
+#include "emit.h"
+#include "linkedList.h"
 #include "aabb.h"
 #include "tank.h"
 #include "bullet.h"
@@ -43,8 +45,8 @@ bool AABB_Swept_collision(const AABB *wall, const AABB *moving, const jo_fixed v
         entry = jo_fixed_mult(vy, entryTime);
 
         // Check for vertical collision
-        if (moving->Bottom + entry < wall->Top &&
-            moving->Top + entry > wall->Bottom)
+        if (moving->Bottom + entry <= wall->Top &&
+            moving->Top + entry >= wall->Bottom)
         {
             *ex = entryTime;
             hc = true;
@@ -71,8 +73,8 @@ bool AABB_Swept_collision(const AABB *wall, const AABB *moving, const jo_fixed v
         entry = jo_fixed_mult(vx, entryTime);
 
         // Check for horizontal collision
-        if (moving->Left + entry < wall->Right &&
-            moving->Right + entry > wall->Left)
+        if (moving->Left + entry <= wall->Right &&
+            moving->Right + entry >= wall->Left)
         {
             *ey = entryTime;
             vc = true;
@@ -82,31 +84,66 @@ bool AABB_Swept_collision(const AABB *wall, const AABB *moving, const jo_fixed v
     return hc || vc;
 }
 
-static void Bullet_Update_Single(bullet_Object *bullet, bullet_List *bullets, tank_Object *tanks, map_Data *map)
+static void Bullet_Create_explosion(linked_List *emits, bullet_Object *bullet)
 {
-    // Update trail
-    for (int trail = BULLET_TRAIL_LENGTH - 1; trail > 0; trail--)
+    for (int angle = 0; angle < 360; angle+=36)
     {
-        bullet->Trail[trail].x = bullet->Trail[trail - 1].x;
-        bullet->Trail[trail].y = bullet->Trail[trail - 1].y;
-        bullet->Trail[trail].z = bullet->Trail[trail - 1].z;
+        Emit_data * emit = jo_malloc(sizeof(Emit_data));
+        emit->Location = bullet->Location;
+        emit->Velocity.x = jo_sin(angle) / 2;
+        emit->Velocity.y = 0;
+        emit->Velocity.z = jo_cos(angle) / 2;
+        emit->FramesToLive = 25;
+        emit->FramesAlive = 0;
+        emit->BaseScaleDiv = JO_FIXED_2;
+        emit->SpriteId = bullet->ExpSpriteId;
+        linkedList_Add(emits, emit);
+    }
+}
+
+static void Bullet_Create_trail(linked_List *emits, bullet_Object *bullet)
+{
+    Emit_data * emit = jo_malloc(sizeof(Emit_data));
+    emit->Location = bullet->Location;
+    emit->Velocity.x = 0;
+    emit->Velocity.y = 0;
+    emit->Velocity.z = 0;
+    emit->FramesToLive = 35;
+    emit->FramesAlive = 0;
+    emit->BaseScaleDiv = JO_FIXED_4;
+    emit->SpriteId = bullet->TrailSpriteId;
+    linkedList_Add(emits, emit);
+}
+
+static void Bullet_Update_Single(bullet_Object *bullet, linked_List *emits, linked_List *bullets, tank_Object *tanks, map_Data *map)
+{
+    // Prevent bullets that miss collision to fly out
+    if (map->Walls[1].Rectangle.Bottom < bullet->Location.y ||
+        map->Walls[2].Rectangle.Bottom > bullet->Location.y ||
+        map->Walls[0].Rectangle.Left > bullet->Location.x ||
+        map->Walls[3].Rectangle.Left < bullet->Location.x)
+    {
+        Bullet_Destroy(bullets, bullet);
+        return;
     }
 
-    bullet->Trail[0].x = bullet->Location.x;
-    bullet->Trail[0].y = bullet->Location.y;
-    bullet->Trail[0].z = bullet->Location.z;
-
     // Update bullet
+    if (bullet->framesAlive % 10 == 0)
+    {
+        Bullet_Create_trail(emits, bullet);
+    }
+
+    bullet->framesAlive++;
     jo_fixed vx = bullet->Velocity.x;
     jo_fixed vy = bullet->Velocity.z;
     AABB moving;
     AABB_Create_by_center(&moving, bullet->Location.x, bullet->Location.z, JO_FIXED_2);
     AABB moved;
-    AABB_Create_by_center(&moving, bullet->Location.x + vx, bullet->Location.z + vy, JO_FIXED_2);
+    AABB_Create_by_center(&moved, bullet->Location.x + vx, bullet->Location.z + vy, JO_FIXED_2);
 
     for (int tankIndex = 0; tankIndex < map->Header.NumOfSpawns; tankIndex++)
     {
-        if (!tanks[tankIndex].IsExploded && (bullet->Bounced || (!bullet->Bounced && tanks[tankIndex].Id != bullet->Id)))
+        if (!tanks[tankIndex].IsExploded && (bullet->Bounced || (!bullet->Bounced && tanks[tankIndex].Id != bullet->FiredBy->Id)))
         {
             AABB standing;
             jo_fixed sx;
@@ -119,22 +156,28 @@ static void Bullet_Update_Single(bullet_Object *bullet, bullet_List *bullets, ta
                 PLAYER_BOX_SIZE);
 
             if (AABB_Collides(&standing, &moved) ||
+                AABB_Collides(&standing, &moving) ||
                 AABB_Swept_collision(&standing, &moving, vx, vy, &sx, &sy))
             {
                 tanks[tankIndex].IsExploded = true;
+                Bullet_Create_explosion(emits, bullet);
                 Bullet_Destroy(bullets, bullet);
                 return;
             }
         }
     }
 
-    for (int wallIndex = 0; wallIndex < map->Header.NumOfWalls; wallIndex++)
+    int wallIndex = 0;
+    int wallIgnore = -1;
+
+    while(wallIndex < map->Header.NumOfWalls)
     {
         // Collision response
         jo_fixed sx;
         jo_fixed sy;
 
-        if (!WALL_IGNORE_BULLET(map->Walls[wallIndex].Flags) &&
+        if (wallIndex != wallIgnore &&
+            !WALL_IGNORE_BULLET(map->Walls[wallIndex].Flags) &&
             !WALL_BROKEN(map->Walls[wallIndex].Flags) &&
             AABB_Swept_collision(&map->Walls[wallIndex].Rectangle, &moving, vx, vy, &sx, &sy))
         {
@@ -142,25 +185,39 @@ static void Bullet_Update_Single(bullet_Object *bullet, bullet_List *bullets, ta
             {
                 map->Walls[wallIndex].Flags |= 0x2;
                 Bullet_Destroy(bullets, bullet);
+                Bullet_Create_explosion(emits, bullet);
+                break;
             }
             else if (bullet->Bounced)
             {
                 Bullet_Destroy(bullets, bullet);
+                Bullet_Create_explosion(emits, bullet);
+                break;
             }
             else
             {
+                wallIgnore = wallIndex;
+                wallIndex = 0;
                 bullet->Bounced = true;
 
                 if (sx != JO_FIXED_1)
                 {
                     bullet->Velocity.x = -bullet->Velocity.x;
+                    bullet->Location.x += jo_fixed_mult(bullet->Velocity.x, sx);
+                    vx = -jo_fixed_mult(bullet->Velocity.x, JO_FIXED_1 - sx);
                 }
 
                 if (sy != JO_FIXED_1)
                 {
                     bullet->Velocity.z = -bullet->Velocity.z;
+                    bullet->Location.z += jo_fixed_mult(bullet->Velocity.z, sy);
+                    vy = -jo_fixed_mult(bullet->Velocity.z, JO_FIXED_1 - sy);
                 }
             }
+        }
+        else
+        {
+            wallIndex++;
         }
     }
 
@@ -168,15 +225,15 @@ static void Bullet_Update_Single(bullet_Object *bullet, bullet_List *bullets, ta
     bullet->Location.z += vy;
 }
 
-void Bullet_Update_All(bullet_List *bullets, tank_Object *tanks, map_Data *map)
+void Bullet_Update_All(linked_List *bullets, linked_List *emits, tank_Object *tanks, map_Data *map)
 {
-    bullet_List *bulletList = bullets;
+    linked_List *bulletList = bullets;
 
-    while (bulletList != NULL)
+    while (bulletList != JO_NULL)
     {
-        if (bulletList->Bullet != NULL)
+        if (bulletList->Current != JO_NULL)
         {
-            Bullet_Update_Single(bulletList->Bullet, bullets, tanks, map);
+            Bullet_Update_Single(bulletList->Current, emits, bullets, tanks, map);
         }
 
         bulletList = bulletList->Next;
