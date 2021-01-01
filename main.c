@@ -7,6 +7,9 @@
 #include "map.h"
 #include "collisions.h"
 
+// Set this to 1, to build for demo disc
+#define DEMO_DISC 0
+
 static jo_camera cam;
 static jo_sound soundBum;
 static jo_sound soundclick;
@@ -269,6 +272,15 @@ void game_loop(void)
     }
 }
 
+
+#if DEMO_DISC == 1
+// This is for returning to demo disc menu
+void the_demo_thingy_exit()
+{
+    SYS_Exit(1);
+}
+#endif
+
 void jo_main(void)
 {
     // Prepare scene
@@ -289,6 +301,10 @@ void jo_main(void)
     jo_audio_load_pcm("CLICK.PCM", JoSoundMono16Bit, &soundclick);
 
     // Start game
+#if DEMO_DISC == 1
+    jo_core_set_restart_game_callback(the_demo_thingy_exit);
+#endif
+
     jo_core_add_callback(draw_loop);
     jo_core_add_callback(game_loop);
 
