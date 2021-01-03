@@ -23,6 +23,7 @@ static linked_List emits;
 static map_Data * map = JO_NULL;
 static tank_Object * tanks = JO_NULL;
 static int selectedMap = 0;
+bool inputValid = false;
 
 static char *mapImages[3] = 
 {
@@ -58,7 +59,7 @@ void StartGame(const char *const mapFile)
     {
         Tank_Create(&tanks[tank], tank, map->Spawns[tank].PlayerStartAngle, map->Spawns[tank].Location.x, 0, map->Spawns[tank].Location.y);
         
-        for (int controller = lastChecked; controller < 16; controller++)
+        for (int controller = lastChecked; controller < JO_INPUT_MAX_DEVICE; controller++)
         {
             if (jo_is_input_available(controller))
             {
@@ -109,6 +110,13 @@ void LoadMainMenu(void)
 void draw_loop(void)
 {
     jo_clear_screen();
+
+    if (!inputValid)
+    {
+        jo_printf_with_color(6,20, JO_COLOR_INDEX_Red,"Please connect 2 controllers");
+        return;
+    }
+
     jo_3d_camera_look_at(&cam);
 
     if (inGame)
@@ -141,6 +149,11 @@ void game_loop(void)
     if (cdStatus.status == CDC_ST_OPEN)
     {
         jo_goto_boot_menu();
+    }
+
+    if (!inputValid)
+    {
+        return;
     }
 
     if (inGame)
@@ -272,6 +285,20 @@ void game_loop(void)
     }
 }
 
+void check_input()
+{
+    int count = 0;
+
+    for (int controller = 0; controller < JO_INPUT_MAX_DEVICE; controller++)
+    {
+        if (jo_is_input_available(controller))
+        {
+            count++;
+        }
+    }
+
+    inputValid = count > 1;
+}
 
 #if DEMO_DISC == 1
 // This is for returning to demo disc menu
@@ -305,6 +332,7 @@ void jo_main(void)
     jo_core_set_restart_game_callback(the_demo_thingy_exit);
 #endif
 
+    jo_core_add_callback(check_input);
     jo_core_add_callback(draw_loop);
     jo_core_add_callback(game_loop);
 
