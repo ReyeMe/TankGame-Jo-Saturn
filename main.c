@@ -304,7 +304,7 @@ void check_input()
 // This is for returning to demo disc menu
 void the_demo_thingy_exit()
 {
-    SYS_Exit(1);
+    jo_goto_boot_menu();
 }
 #endif
 
