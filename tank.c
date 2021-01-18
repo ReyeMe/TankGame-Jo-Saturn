@@ -1,5 +1,14 @@
 #include <jo/jo.h>
 #include "tank.h"
+#include "tankMesh.h"
+
+/**
+ * Tank color table
+ */
+static jo_color TankColors[] =
+	{
+		JO_COLOR_RGB(255,80,80),
+		JO_COLOR_RGB(100,100,255)};
 
 /**
  * Contains loaded meshes for all tank color variants 
