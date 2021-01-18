@@ -4,6 +4,7 @@
 
 /**
  * Tank color table
+ * When color is set to 0, tank will be white, PUT ONLY AT THE END OF A LIST!
  */
 static jo_color TankColors[] =
 	{
@@ -35,6 +36,7 @@ static void Tank_Create_Mesh_Body(const int startTextureIndex, const unsigned ch
 		Tank_variants[meshIndex].data.attbl[iterator] = AttributesTankBody[iterator];
 		Tank_variants[meshIndex].data.attbl[iterator].texno += startTextureIndex;
 
+		// Add gouraud if not a solid color polygon/threads or tank color is white
 		if (AttributesTankBody[iterator].texno != 0 && TankColors[color] != 0)
 		{
 			Tank_variants[meshIndex].data.attbl[iterator].gstb = 0xe000 + color;
@@ -63,6 +65,7 @@ static void Tank_Create_Mesh_Tower(const int startTextureIndex, const unsigned c
 		Tank_variants[meshIndex].data.attbl[iterator] = AttributesTankTower[iterator];
 		Tank_variants[meshIndex].data.attbl[iterator].texno += startTextureIndex;
 
+		// Add gouraud if tank color is not white
 		if (TankColors[color] != 0)
 		{
 			Tank_variants[meshIndex].data.attbl[iterator].gstb = 0xe000 + color;
@@ -108,11 +111,15 @@ void Tank_Load_textures(void)
 	for (color = 0; color < TANK_COLOR_COUNT; color++)
 	{
 		// Load gouraud table
-		ptr = (jo_color *)(JO_VDP1_VRAM + 0x70000 + JO_MULT_BY_8(color));
-		*ptr = TankColors[color];
-		*(ptr + 1) = TankColors[color];
-		*(ptr + 2) = TankColors[color];
-		*(ptr + 3) = TankColors[color];
+		// If color is set to 0, do not create gouraud entry, it won't be used in resulting mesh
+		if (TankColors[color] != 0)
+		{
+			ptr = (jo_color *)(JO_VDP1_VRAM + 0x70000 + JO_MULT_BY_8(color));
+			*ptr = TankColors[color];
+			*(ptr + 1) = TankColors[color];
+			*(ptr + 2) = TankColors[color];
+			*(ptr + 3) = TankColors[color];
+		}
 
 		// Create tank meshes with correct attributes
 		Tank_Create_Mesh_Body(spriteStartIndex, color);
