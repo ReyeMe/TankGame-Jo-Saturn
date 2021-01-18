@@ -1,6 +1,9 @@
 #ifndef __EMIT_H__
 #define __EMIT_H__
 
+/**
+ * Basic emited sprite
+ */
 typedef struct
 {
     int SpriteId;

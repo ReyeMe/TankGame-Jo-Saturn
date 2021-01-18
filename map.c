@@ -46,7 +46,8 @@ map_Data *Map_Load(const char *const sub_dir, const char *const filename)
             stream++;
             map->Spawns[counter].Location.y = jo_int2fixed(*(char*)stream);
             stream++;
-            map->Spawns[counter].PlayerStartAngle = (*(unsigned char*)stream++ << 8) | *(unsigned char*)stream++;
+            map->Spawns[counter].PlayerStartAngle = (*(unsigned char*)stream << 8) | *(unsigned char*)(stream + 1);
+            stream += 2;
         }
     }
     else

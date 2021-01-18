@@ -1,6 +1,67 @@
 #include <jo/jo.h>
 #include "tank.h"
 
+/**
+ * Contains loaded meshes for all tank color variants 
+ */
+static jo_3d_mesh Tank_variants[TANK_COLOR_COUNT * 2];
+
+/**
+ * Creates mesh body for specified tank color
+ * @param startTextureIndex Starting index of tank textures
+ * @param color Tank color
+ */
+static void Tank_Create_Mesh_Body(const int startTextureIndex, const unsigned char color)
+{
+	int iterator = 0;
+	int meshIndex = color * 2;
+	Tank_variants[meshIndex].data.pntbl = PointsTankBody;
+	Tank_variants[meshIndex].data.nbPoint = 90;
+	Tank_variants[meshIndex].data.pltbl = PolygonsTankBody;
+	Tank_variants[meshIndex].data.nbPolygon = 21;
+	Tank_variants[meshIndex].data.attbl = jo_malloc(sizeof(ATTR) * 21);
+
+	for (iterator = 0; iterator < 21; iterator++)
+	{
+		Tank_variants[meshIndex].data.attbl[iterator] = AttributesTankBody[iterator];
+		Tank_variants[meshIndex].data.attbl[iterator].texno += startTextureIndex;
+
+		if (AttributesTankBody[iterator].texno != 0 && TankColors[color] != 0)
+		{
+			Tank_variants[meshIndex].data.attbl[iterator].gstb = 0xe000 + color;
+			JO_ADD_FLAG(Tank_variants[meshIndex].data.attbl[iterator].atrb, CL_Gouraud);
+		}
+	}
+}
+
+/**
+ * Creates mesh body for specified tank tower color
+ * @param startTextureIndex Starting index of tank textures
+ * @param color Tank tower color
+ */
+static void Tank_Create_Mesh_Tower(const int startTextureIndex, const unsigned char color)
+{
+	int iterator = 0;
+	int meshIndex = (color * 2) + 1;
+	Tank_variants[meshIndex].data.pntbl = PointsTankTower;
+	Tank_variants[meshIndex].data.nbPoint = 8;
+	Tank_variants[meshIndex].data.pltbl = PolygonsTankTower;
+	Tank_variants[meshIndex].data.nbPolygon = 5;
+	Tank_variants[meshIndex].data.attbl = jo_malloc(sizeof(ATTR) * 5);
+
+	for (iterator = 0; iterator < 5; iterator++)
+	{
+		Tank_variants[meshIndex].data.attbl[iterator] = AttributesTankTower[iterator];
+		Tank_variants[meshIndex].data.attbl[iterator].texno += startTextureIndex;
+
+		if (TankColors[color] != 0)
+		{
+			Tank_variants[meshIndex].data.attbl[iterator].gstb = 0xe000 + color;
+			JO_ADD_FLAG(Tank_variants[meshIndex].data.attbl[iterator].atrb, CL_Gouraud);
+		}
+	}
+}
+
 void Tank_Create(tank_Object *tank, const char color, const short tankAngle, const jo_fixed x, const jo_fixed y, const jo_fixed z)
 {
 	static int id = 0;
@@ -23,37 +84,37 @@ void Tank_Create(tank_Object *tank, const char color, const short tankAngle, con
 void Tank_Load_textures(void)
 {
 	int spriteStartIndex = 0;
-	int iterator = 0;
+	int color = 0;
+	jo_color *ptr;
 
-	// Load blue tank
-	spriteStartIndex = jo_sprite_add_tga("TBLUE", "THREADS.TGA", JO_COLOR_Transparent);
-	jo_sprite_add_tga("TBLUE", "SIDES.TGA", JO_COLOR_Transparent);
-	jo_sprite_add_tga("TBLUE", "BACK.TGA", JO_COLOR_Transparent);
-	jo_sprite_add_tga("TBLUE", "TOP.TGA", JO_COLOR_Transparent);
-	jo_sprite_add_tga("TBLUE", "TBOT.TGA", JO_COLOR_Transparent);
-	jo_sprite_add_tga("TBLUE", "TSIDES.TGA", JO_COLOR_Transparent);
-	jo_sprite_add_tga("TBLUE", "FFIRE.TGA", JO_COLOR_Black);
+	// Load textures
+	spriteStartIndex = jo_sprite_add_tga("TANK", "THREADS.TGA", JO_COLOR_Transparent);
+	jo_sprite_add_tga("TANK", "SIDES.TGA", JO_COLOR_Transparent);
+	jo_sprite_add_tga("TANK", "BACK.TGA", JO_COLOR_Transparent);
+	jo_sprite_add_tga("TANK", "TOP.TGA", JO_COLOR_Transparent);
+	jo_sprite_add_tga("TANK", "TBOT.TGA", JO_COLOR_Transparent);
+	jo_sprite_add_tga("TANK", "TSIDES.TGA", JO_COLOR_Transparent);
+	jo_sprite_add_tga("TANK", "FFIRE.TGA", JO_COLOR_Black);
 
-	for (iterator = 0; iterator < 21; iterator++)
-		AttributesBlueTankBody[iterator].texno += spriteStartIndex;
+	for (color = 0; color < TANK_COLOR_COUNT; color++)
+	{
+		// Load gouraud table
+    	ptr = (jo_color *)(JO_VDP1_VRAM + 0x70000 + JO_MULT_BY_8(color));
+    	*ptr = TankColors[color];
+    	*(ptr + 1) = TankColors[color];
+    	*(ptr + 2) = TankColors[color];
+    	*(ptr + 3) = TankColors[color];
 
-	for (iterator = 0; iterator < 5; iterator++)
-		AttributesBlueTankTower[iterator].texno += spriteStartIndex;
-
-	// Load Red tank
-	spriteStartIndex = jo_sprite_add_tga("TRED", "THREADS.TGA", JO_COLOR_Transparent);
-	jo_sprite_add_tga("TRED", "SIDES.TGA", JO_COLOR_Transparent);
-	jo_sprite_add_tga("TRED", "BACK.TGA", JO_COLOR_Transparent);
-	jo_sprite_add_tga("TRED", "TOP.TGA", JO_COLOR_Transparent);
-	jo_sprite_add_tga("TRED", "TBOT.TGA", JO_COLOR_Transparent);
-	jo_sprite_add_tga("TRED", "TSIDES.TGA", JO_COLOR_Transparent);
-	jo_sprite_add_tga("TRED", "FFIRE.TGA", JO_COLOR_Black);
-
-	for (iterator = 0; iterator < 21; iterator++)
-		AttributesRedTankBody[iterator].texno += spriteStartIndex;
-
-	for (iterator = 0; iterator < 5; iterator++)
-		AttributesRedTankTower[iterator].texno += spriteStartIndex;
+		// Create tank meshes with correct attributes
+		Tank_Create_Mesh_Body(spriteStartIndex, color);
+		Tank_Create_Mesh_Tower(spriteStartIndex, color);
+	}
+	
+	for (color = 0; color < TANK_COLOR_COUNT; color++)
+	{
+		Tank_Create_Mesh_Body(spriteStartIndex, color);
+		Tank_Create_Mesh_Tower(spriteStartIndex, color);
+	}
 }
 
 void Tank_Input_Update(tank_Object *tank)
@@ -103,8 +164,6 @@ void Tank_Input_Update(tank_Object *tank)
             tank->Velocity.z = jo_fixed_mult(jo_cos(tank->TankAngle) * thrust, PLAYER_SPEED);
         }
     }
-
-	return thrust;
 }
 
 void Tank_Draw(tank_Object *tank)
@@ -117,12 +176,12 @@ void Tank_Draw(tank_Object *tank)
 		jo_3d_push_matrix();
 		{
 			jo_3d_rotate_matrix_y(tank->TankAngle);
-			jo_3d_mesh_draw(TankColors[tank->Color * 2]);
+			jo_3d_mesh_draw(&(Tank_variants[tank->Color * 2]));
 
 			if (!tank->IsExploded)
 			{
 				jo_3d_rotate_matrix_y(tank->TowerAngle);
-				jo_3d_mesh_draw(TankColors[(tank->Color * 2) + 1]);
+				jo_3d_mesh_draw(&(Tank_variants[(tank->Color * 2) + 1]));
 
 				if (tank->FiringAnimationFrames != 0)
 				{

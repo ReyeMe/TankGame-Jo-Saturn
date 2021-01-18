@@ -7,7 +7,7 @@ JO_COMPILE_WITH_PSEUDO_MODE7_MODULE = 0
 JO_COMPILE_WITH_EFFECTS_MODULE = 0
 JO_COMPILE_WITH_FAST_BUT_LESS_ACCURATE_MATH = 0
 JO_DEBUG = 1
-SRCS=main.c linkedList.c aabb.c collisions.c tank.c bullet.c map.c
+SRCS=$(patsubst ./%,%,$(shell $(CURDIR)/.vscode/compile.bat findSources))
 JO_ENGINE_SRC_DIR=../../jo_engine
 COMPILER_DIR=../../Compiler
 include $(COMPILER_DIR)/COMMON/jo_engine_makefile

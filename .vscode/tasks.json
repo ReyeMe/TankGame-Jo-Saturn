@@ -4,7 +4,7 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "${workspaceFolder}/compile.bat",
+            "command": "${workspaceFolder}/.vscode/compile.bat",
             "args": [],
             "group": "build",
             "presentation": {
@@ -15,7 +15,7 @@
         {
             "label": "clean",
             "type": "shell",
-            "command": "${workspaceFolder}/compile.bat",
+            "command": "${workspaceFolder}/.vscode/compile.bat",
             "args": [
                 "cleanOnly"
             ],
@@ -28,7 +28,7 @@
         {
             "label": "build & run",
             "type": "shell",
-            "command": "${workspaceFolder}/compile.bat",
+            "command": "${workspaceFolder}/.vscode/compile.bat",
             "args": [
                 "alsoRun"
             ],
@@ -39,11 +39,39 @@
             "problemMatcher": []
         },
         {
+            "label": "build & run (mednafen)",
+            "type": "shell",
+            "command": "${workspaceFolder}/.vscode/compile.bat",
+            "args": [
+                "alsoRun",
+                "mednafen"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "never"
+            },
+            "problemMatcher": []
+        },
+        {
             "label": "run",
             "type": "shell",
-            "command": "${workspaceFolder}/compile.bat",
+            "command": "${workspaceFolder}/.vscode/compile.bat",
             "args": [
                 "run"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "never"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "run (mednafen)",
+            "type": "shell",
+            "command": "${workspaceFolder}/.vscode/compile.bat",
+            "args": [
+                "run",
+                "mednafen"
             ],
             "group": "build",
             "presentation": {

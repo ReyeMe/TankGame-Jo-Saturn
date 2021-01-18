@@ -5,6 +5,7 @@
 #define PLAYER_BOX_SIZEH JO_FIXED_2 + JO_FIXED_1_DIV_2
 #define PLAYER_SPEED 6553
 #define PLAYER_FIRE_ANIMATION 80
+#define TANK_COLOR_COUNT 2
 
 static POINT PointsTankBody[] =
 	{
@@ -186,82 +187,50 @@ static POLYGON PolygonsTankFlash[] =
 
 static ATTR AttributesTankGun[] =
 	{
-		ATTRIBUTE(Dual_Plane, SORT_CEN, No_Texture, C_RGB(70, 70, 70), CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprPolygon, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, No_Texture, C_RGB(10, 10, 10), CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprPolygon, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, No_Texture, C_RGB(70, 70, 70), CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprPolygon, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, No_Texture, C_RGB(70, 70, 70), CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprPolygon, No_Option)};
+		ATTRIBUTE(Single_Plane, SORT_CEN, No_Texture, C_RGB(70, 70, 70), CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprPolygon, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, No_Texture, C_RGB(10, 10, 10), CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprPolygon, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, No_Texture, C_RGB(70, 70, 70), CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprPolygon, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, No_Texture, C_RGB(70, 70, 70), CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprPolygon, No_Option)};
 
 static ATTR AttributesTankFlash[] =
 	{
 		ATTRIBUTE(Dual_Plane, SORT_CEN, 6, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHon, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, No_Texture, C_RGB(255, 255, 0), CL32KRGB | No_Gouraud, CL32KRGB | MESHon, sprPolygon, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, No_Texture, C_RGB(255, 255, 0), CL32KRGB | No_Gouraud, CL32KRGB | MESHon, sprPolygon, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, No_Texture, C_RGB(255, 255, 0), CL32KRGB | No_Gouraud, CL32KRGB | MESHon, sprPolygon, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, No_Texture, C_RGB(255, 255, 0), CL32KRGB | No_Gouraud, CL32KRGB | MESHon, sprPolygon, No_Option)};
+		ATTRIBUTE(Single_Plane, SORT_CEN, No_Texture, C_RGB(255, 255, 0), CL32KRGB | No_Gouraud, CL32KRGB | MESHon, sprPolygon, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, No_Texture, C_RGB(255, 255, 0), CL32KRGB | No_Gouraud, CL32KRGB | MESHon, sprPolygon, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, No_Texture, C_RGB(255, 255, 0), CL32KRGB | No_Gouraud, CL32KRGB | MESHon, sprPolygon, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, No_Texture, C_RGB(255, 255, 0), CL32KRGB | No_Gouraud, CL32KRGB | MESHon, sprPolygon, No_Option)};
 
-static ATTR AttributesBlueTankBody[] =
+static ATTR AttributesTankBody[] =
 	{
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 0, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 0, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, No_Texture, C_RGB(0, 0, 0), CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprPolygon, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, No_Texture, C_RGB(0, 0, 0), CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprPolygon, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 0, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 0, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 1, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 1, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 3, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 3, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 3, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 1, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 2, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 3, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 4, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 1, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 1, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 1, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 3, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 3, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 1, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option)};
+		ATTRIBUTE(Single_Plane, SORT_CEN, 0, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, 0, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, No_Texture, C_RGB(0, 0, 0), CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprPolygon, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, No_Texture, C_RGB(0, 0, 0), CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprPolygon, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, 0, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, 0, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, 1, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, 1, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, 3, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, 3, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, 3, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, 1, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, 2, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, 3, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, 4, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, 1, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, 1, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, 1, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, 3, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, 3, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, 1, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option)};
 
-static ATTR AttributesBlueTankTower[] =
+static ATTR AttributesTankTower[] =
 	{
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 5, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 5, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 5, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 5, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 5, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option)};
-
-static ATTR AttributesRedTankBody[] =
-	{
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 0, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 0, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, No_Texture, C_RGB(0, 0, 0), CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprPolygon, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, No_Texture, C_RGB(0, 0, 0), CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprPolygon, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 0, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 0, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 1, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 1, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 3, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 3, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 3, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 1, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 2, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 3, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 4, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 1, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 1, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 1, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 3, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 3, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 1, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option)};
-
-static ATTR AttributesRedTankTower[] =
-	{
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 5, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 5, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 5, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 5, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
-		ATTRIBUTE(Dual_Plane, SORT_CEN, 5, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option)};
+		ATTRIBUTE(Single_Plane, SORT_CEN, 5, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, 5, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, 5, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, 5, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option),
+		ATTRIBUTE(Single_Plane, SORT_CEN, 5, No_Palet, CL32KRGB | No_Gouraud, CL32KRGB | MESHoff, sprNoflip, No_Option)};
 
 static jo_3d_mesh MeshTankGun =
 	{
@@ -283,55 +252,13 @@ static jo_3d_mesh MeshTankFlash =
 				5,
 				AttributesTankFlash}};
 
-static jo_3d_mesh MeshBlueTankBody =
-	{
-		.data =
-			{
-				PointsTankBody,
-				90,
-				PolygonsTankBody,
-				21,
-				AttributesBlueTankBody}};
-
-static jo_3d_mesh MeshBlueTankTower =
-	{
-		.data =
-			{
-				PointsTankTower,
-				8,
-				PolygonsTankTower,
-				5,
-				AttributesBlueTankTower}};
-
-static jo_3d_mesh MeshRedTankBody =
-	{
-		.data =
-			{
-				PointsTankBody,
-				90,
-				PolygonsTankBody,
-				21,
-				AttributesRedTankBody}};
-
-static jo_3d_mesh MeshRedTankTower =
-	{
-		.data =
-			{
-				PointsTankTower,
-				8,
-				PolygonsTankTower,
-				5,
-				AttributesRedTankTower}};
-
 /**
  * Tank color table
  */
-static jo_3d_mesh *TankColors[] =
+static jo_color TankColors[] =
 	{
-		&MeshBlueTankBody,
-		&MeshBlueTankTower,
-		&MeshRedTankBody,
-		&MeshRedTankTower};
+		JO_COLOR_RGB(255,80,80),
+		JO_COLOR_RGB(100,100,255)};
 
 /**
  * Structure to represent player or computer controled tank

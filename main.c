@@ -137,7 +137,7 @@ void draw_loop(void)
         jo_printf_with_color(9, 21, JO_COLOR_INDEX_White, "Press start to play...");
 
         jo_printf_with_color(1,28, JO_COLOR_INDEX_Purple, "Created by Reye (web: reye.me)");
-        jo_set_printf_color_index(JO_COLOR_Black);
+        jo_set_printf_color_index(JO_COLOR_INDEX_White);
     }
 }
 
@@ -229,7 +229,7 @@ void game_loop(void)
                 jo_printf_with_color(13, 15, JO_COLOR_INDEX_White, "Player %d wins!", lastAlive);
                 jo_printf_with_color(10, 16, JO_COLOR_INDEX_White, "Press B to restart or");
                 jo_printf_with_color(7, 17, JO_COLOR_INDEX_White, "press A to go to main menu");
-                jo_set_printf_color_index(JO_COLOR_Black);
+                jo_set_printf_color_index(JO_COLOR_INDEX_White);
 
                 if (jo_is_pad1_key_down(JO_KEY_A))
                 {
