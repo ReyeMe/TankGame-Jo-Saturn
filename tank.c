@@ -125,12 +125,6 @@ void Tank_Load_textures(void)
 		Tank_Create_Mesh_Body(spriteStartIndex, color);
 		Tank_Create_Mesh_Tower(spriteStartIndex, color);
 	}
-
-	for (color = 0; color < TANK_COLOR_COUNT; color++)
-	{
-		Tank_Create_Mesh_Body(spriteStartIndex, color);
-		Tank_Create_Mesh_Tower(spriteStartIndex, color);
-	}
 }
 
 void Tank_Input_Update(tank_Object *tank)
