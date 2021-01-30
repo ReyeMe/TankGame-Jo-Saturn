@@ -1,9 +1,9 @@
 #include <jo/jo.h>
-#include "emit.h"
+#include "Entities/emit.h"
 #include "linkedList.h"
 #include "aabb.h"
-#include "tank.h"
-#include "bullet.h"
+#include "Entities/tank.h"
+#include "Entities/bullet.h"
 #include "map.h"
 #include "collisions.h"
 

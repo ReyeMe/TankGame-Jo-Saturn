@@ -1,14 +1,11 @@
 #include <jo/jo.h>
 #include "linkedList.h"
-#include "emit.h"
+#include "Entities/emit.h"
 #include "aabb.h"
-#include "tank.h"
-#include "bullet.h"
+#include "Entities/tank.h"
+#include "Entities/bullet.h"
 #include "map.h"
 #include "collisions.h"
-
-// Set this to 1, to build for demo disc
-#define DEMO_DISC 0
 
 static jo_camera cam;
 static jo_sound soundBum;
@@ -300,14 +297,6 @@ void check_input()
     inputValid = count > 1;
 }
 
-#if DEMO_DISC == 1
-// This is for returning to demo disc menu
-void the_demo_thingy_exit()
-{
-    jo_goto_boot_menu();
-}
-#endif
-
 void jo_main(void)
 {
     // Prepare scene
@@ -328,9 +317,7 @@ void jo_main(void)
     jo_audio_load_pcm("CLICK.PCM", JoSoundMono16Bit, &soundclick);
 
     // Start game
-#if DEMO_DISC == 1
-    jo_core_set_restart_game_callback(the_demo_thingy_exit);
-#endif
+    jo_core_set_restart_game_callback(jo_goto_boot_menu);
 
     jo_core_add_callback(check_input);
     jo_core_add_callback(draw_loop);

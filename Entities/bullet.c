@@ -1,5 +1,5 @@
 #include <jo/jo.h>
-#include "linkedList.h"
+#include "../linkedList.h"
 #include "tank.h"
 #include "bullet.h"
 

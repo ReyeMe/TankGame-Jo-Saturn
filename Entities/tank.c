@@ -1,6 +1,6 @@
 #include <jo/jo.h>
 #include "tank.h"
-#include "tankMesh.h"
+#include "../Models/tankMesh.h"
 
 /**
  * Tank color table
