@@ -19,4 +19,5 @@ Simple tank game inspired or might be even clone of WiiTanks written in C for Se
 - [x] Create static objects to put on maps
 - [x] Create first simple map
 - [x] Create UI and menus
+- [x] Load tank model from file
 - [ ] ... Do more, maybe, idk
