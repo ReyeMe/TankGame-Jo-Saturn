@@ -294,7 +294,7 @@ void check_input()
         }
     }
 
-    inputValid = count > 1;
+    inputValid = true;//count > 1;
 }
 
 void jo_main(void)
@@ -307,7 +307,7 @@ void jo_main(void)
 
     linkedList_Initialize(&emits);
     linkedList_Initialize(&bullets);
-    Tank_Load_textures();
+    Tank_Load();
     Bullet_Initialize();
 
     LoadMainMenu();

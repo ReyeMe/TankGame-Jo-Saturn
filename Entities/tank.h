@@ -8,6 +8,18 @@
 #define TANK_COLOR_COUNT 2
 
 /**
+ * Structure to represent tank model
+ */
+typedef struct
+{
+	jo_3d_mesh * tower;
+	jo_3d_mesh * body;
+	jo_3d_mesh * gun;
+	jo_3d_mesh * flash;
+} tank_mesh;
+
+
+/**
  * Structure to represent player or computer controled tank
  */
 typedef struct
@@ -36,9 +48,9 @@ typedef struct
 void Tank_Create(tank_Object *tank, const char color, const short tankAngle, const jo_fixed x, const jo_fixed y, const jo_fixed z);
 
 /**
- * Load tank textures
+ * Load tank model
  */
-void Tank_Load_textures(void);
+void Tank_Load(void);
 
 /**
  * Update tank based on gamepad input
