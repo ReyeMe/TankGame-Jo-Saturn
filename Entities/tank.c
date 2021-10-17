@@ -65,7 +65,6 @@ void Tank_Create(tank_Object *tank, const char color, const short tankAngle, con
 
 void Tank_Load(void)
 {
-	int iterator = 0;
 	jo_color *ptr;
 	int loadedCount = 0;
 	jo_3d_mesh * loaded;
@@ -93,7 +92,7 @@ void Tank_Load(void)
 		for (int model = 1; model < loadedCount; model++)
 		{
 			// Set gouraud
-			for (iterator = 0; iterator < loaded[model].data.nbPolygon; iterator++)
+			for (Uint32 iterator = 0; iterator < loaded[model].data.nbPolygon; iterator++)
 			{
 				// Add gouraud if not a solid color polygon/threads or tank color is white
 				if (loaded[model].data.attbl[iterator].texno != 0)
@@ -167,24 +166,24 @@ void Tank_Draw(tank_Object *tank)
 		jo_3d_push_matrix();
 		{
 			jo_3d_rotate_matrix_y(tank->TankAngle);
-			jo_3d_mesh_draw(&(TankMeshes[tank->Color][3]));
+			jo_3d_mesh_draw(&(TankMeshes[(int)tank->Color][3]));
 
 			if (!tank->IsExploded)
 			{
 				jo_3d_rotate_matrix_y(tank->TowerAngle);
-				jo_3d_mesh_draw(&(TankMeshes[tank->Color][2]));
+				jo_3d_mesh_draw(&(TankMeshes[(int)tank->Color][2]));
 
 				if (tank->FiringAnimationFrames != 0)
 				{
 					int animationHalf = JO_DIV_BY_2(PLAYER_FIRE_ANIMATION);
 
 					if (tank->FiringAnimationFrames < animationHalf)
-						jo_3d_mesh_draw(&(TankMeshes[tank->Color][0]));
+						jo_3d_mesh_draw(&(TankMeshes[(int)tank->Color][0]));
 
 					jo_3d_push_matrix();
 					{
 						jo_3d_translate_matrix_fixed(0, 0, jo_fixed_div(jo_sin(tank->FiringAnimationFrames * 3), JO_FIXED_4));
-						jo_3d_mesh_draw(&(TankMeshes[tank->Color][1]));
+						jo_3d_mesh_draw(&(TankMeshes[(int)tank->Color][1]));
 					}
 					jo_3d_pop_matrix();
 
@@ -197,7 +196,7 @@ void Tank_Draw(tank_Object *tank)
 				}
 				else
 				{
-					jo_3d_mesh_draw(&(TankMeshes[tank->Color][1]));
+					jo_3d_mesh_draw(&(TankMeshes[(int)tank->Color][1]));
 				}
 			}
 		}

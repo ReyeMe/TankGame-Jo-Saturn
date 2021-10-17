@@ -22,25 +22,39 @@ static tank_Object * tanks = JO_NULL;
 static int selectedMap = 0;
 bool inputValid = false;
 
-static char *mapImages[3] = 
+#define MAP_COUNT 7
+
+static char *mapImages[MAP_COUNT] = 
 {
     "PASSAGE.TGA",
     "TOWER.TGA",
-    "PLAZA.TGA"
+    "PLAZA.TGA",
+    "ARENA.TGA",
+    "DYNA.TGA",
+    "RUINS.TGA",
+    "SPLIT.TGA"
 };
 
-static char *mapFiles[3] = 
+static char *mapFiles[MAP_COUNT] = 
 {
     "PASSAGE.TGL",
     "TOWER.TGL",
-    "PLAZA.TGL"
+    "PLAZA.TGL",
+    "ARENA.TGL",
+    "DYNA.TGL",
+    "RUINS.TGL",
+    "SPLIT.TGL"
 };
 
-static char *maps[3] = 
+static char *maps[MAP_COUNT] = 
 {
     "PASSAGE",
     "TOWER",
-    "PLAZA"
+    "PLAZA",
+    "ARENA",
+    "DYNA",
+    "RUINS",
+    "SPLIT"
 };
 
 void StartGame(const char *const mapFile)
@@ -127,9 +141,9 @@ void draw_loop(void)
     }
     else
     {
-        jo_printf_with_color(15, 18, JO_COLOR_INDEX_Yellow, "<");
+        if (selectedMap > 0) jo_printf_with_color(15, 18, JO_COLOR_INDEX_Yellow, "<");
         jo_printf_with_color(17, 18, JO_COLOR_INDEX_White, maps[selectedMap]);
-        jo_printf_with_color(25, 18, JO_COLOR_INDEX_Yellow, ">");
+        if (selectedMap < MAP_COUNT - 1) jo_printf_with_color(25, 18, JO_COLOR_INDEX_Yellow, ">");
 
         jo_printf_with_color(9, 21, JO_COLOR_INDEX_White, "Press start to play...");
 
@@ -256,7 +270,7 @@ void game_loop(void)
                 selectedMap--;
                 selectionChanged = true;
             }
-            else if (selectedMap + 1 <= 2 && jo_is_pad1_key_down(JO_KEY_RIGHT))
+            else if (selectedMap + 1 < MAP_COUNT && jo_is_pad1_key_down(JO_KEY_RIGHT))
             {
                 jo_audio_play_sound(&soundclick);
                 selectedMap++;
@@ -265,8 +279,8 @@ void game_loop(void)
 
             if (selectedMap < 0)
                 selectedMap = 0;
-            else if (selectedMap > 2)
-                selectedMap = 2;
+            else if (selectedMap >= MAP_COUNT)
+                selectedMap = MAP_COUNT - 1;
 
             if (selectionChanged)
             {

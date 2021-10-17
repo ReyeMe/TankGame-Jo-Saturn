@@ -64,10 +64,10 @@ map_Data *Map_Load(const char *const sub_dir, const char *const filename)
     map->Walls[1].Flags = 0;
     map->Walls[2].Flags = 0;
     map->Walls[3].Flags = 0;
-    AABB_Create_size(&map->Walls[0].Rectangle, jo_int2fixed(-37), jo_int2fixed(-28), jo_int2fixed(74), JO_FIXED_2);
-    AABB_Create_size(&map->Walls[1].Rectangle, jo_int2fixed(-37), jo_int2fixed(26), jo_int2fixed(74), JO_FIXED_2);
-    AABB_Create_size(&map->Walls[2].Rectangle, jo_int2fixed(-39), jo_int2fixed(-26), JO_FIXED_2, jo_int2fixed(52));
-    AABB_Create_size(&map->Walls[3].Rectangle, jo_int2fixed(37), jo_int2fixed(-26), JO_FIXED_2, jo_int2fixed(52));
+    AABB_Create_size(&map->Walls[0].Rectangle, jo_int2fixed(-37), jo_int2fixed(-29), jo_int2fixed(74), JO_FIXED_2);
+    AABB_Create_size(&map->Walls[1].Rectangle, jo_int2fixed(-37), jo_int2fixed(27), jo_int2fixed(74), JO_FIXED_2);
+    AABB_Create_size(&map->Walls[2].Rectangle, jo_int2fixed(-39), jo_int2fixed(-27), JO_FIXED_2, jo_int2fixed(54));
+    AABB_Create_size(&map->Walls[3].Rectangle, jo_int2fixed(37), jo_int2fixed(-27), JO_FIXED_2, jo_int2fixed(54));
 
     // Add walls from map file
     for (counter = 4; counter < map->Header.NumOfWalls; counter++)

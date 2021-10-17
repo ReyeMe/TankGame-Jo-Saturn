@@ -1,7 +1,7 @@
 #ifndef __BULLET_H__
 #define __BULLET_H__
 
-#define BULLET_SPEED 19659
+#define BULLET_SPEED 20659
 #define BULLET_SIZE JO_FIXED_1
 #define BULLET_SIZE_RENDER 7768
 

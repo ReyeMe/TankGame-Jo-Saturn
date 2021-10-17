@@ -137,9 +137,9 @@ static void Bullet_Update_Single(bullet_Object *bullet, linked_List *emits, link
     jo_fixed vx = bullet->Velocity.x;
     jo_fixed vy = bullet->Velocity.z;
     AABB moving;
-    AABB_Create_by_center(&moving, bullet->Location.x, bullet->Location.z, JO_FIXED_2);
+    AABB_Create_by_center(&moving, bullet->Location.x, bullet->Location.z, JO_FIXED_1);
     AABB moved;
-    AABB_Create_by_center(&moved, bullet->Location.x + vx, bullet->Location.z + vy, JO_FIXED_2);
+    AABB_Create_by_center(&moved, bullet->Location.x + vx, bullet->Location.z + vy, JO_FIXED_1);
 
     for (int tankIndex = 0; tankIndex < map->Header.NumOfSpawns; tankIndex++)
     {
