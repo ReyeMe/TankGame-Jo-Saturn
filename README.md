@@ -1,6 +1,8 @@
 # TankGame for Sega Saturn
 Simple tank game inspired or might be even clone of WiiTanks written in C for Sega Saturn using Jo-Engine
 
+![Game preview](https://reye.me/img/projects-other/tankgame_02.png)
+
 # Dependencies
 - Jo-Engine https://jo-engine.org/
 
